@@ -34,8 +34,8 @@ var questionIndex = 0;
 var interval;
 var timeLimit = 60;
 
-// render() changes the element with the current question, and changes the button choice text.
-function render() {
+// renderQuestions() renders questions the the element.
+function renderQuestions() {
   var currentQuestion = questions[questionIndex];
   document.getElementById("question").innerText = currentQuestion.question;
   for (var i = 1; i < 5; i++) { // popuates buttons with letter choices.
@@ -44,6 +44,7 @@ function render() {
   }
 }
 
+// starts the countdown and add timer to the header>span tag.
 function startTimer() {
   interval = setInterval(function () {
     if (timeLimit > 1) {
@@ -58,7 +59,7 @@ document.getElementById("startBtn").addEventListener("click", function () {
   document.getElementById("quizScreen").style.display = "block"; // block is the default.
 
   startTimer();
-  render();
+  renderQuestions();
 });
 
 document
@@ -79,7 +80,7 @@ document
 
         return;
       }
-      render();
+      renderQuestions();
     }
   });
 
