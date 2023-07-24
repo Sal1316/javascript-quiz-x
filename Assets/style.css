@@ -1,7 +1,16 @@
+
+:root {
+  --btnColor: rgb(124, 12, 210);
+  
+}
+
 #quizScreen {
       display: none;
 }
 #endScreen {
+      display: none;
+}
+#scoreboardScreen {
       display: none;
 }
 
@@ -14,7 +23,11 @@ header {
       display: flex;
       flex-direction: column;
 }
-#btnContainer button {
-      width: 20%;
+button {
+      width:fit-content;
       text-align: left;
+      background-color: var(--btnColor);
+      color:aliceblue;
+      margin: 2px;
+      border-radius: 3px;
 }
