@@ -35,17 +35,23 @@ var interval;
 var timeLimit = 60;
 var score = 0;  // inital score.
 
-// Steps:
+//Event Handlers: 
+document.getElementById("startBtn").addEventListener("click", startQuiz);
+document.getElementById("quizScreen").addEventListener("click", multipleChoiceBtn);
+document.getElementById("submit").addEventListener("click", submitScore);
+document.getElementById("goBack").addEventListener("click", startQuiz); 
+document.getElementById("clearScores").addEventListener("click", clearHighScores);// clearHighScores vs clearHighScores() when adding parenthesis, it forces click event to run right away.
 
-// 1. when start <button> is clicked, switches from startScreen to quizScreen, starts timerCountdown()  and renderNextQuestion().
-document.getElementById("startBtn").addEventListener("click", function () {
+
+// functions:
+
+function startQuiz() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("quizScreen").style.display = "block"; // block is the default.
-
   timerCountdown();
   renderNextQuestion();
-});
-// 2. starts the countdown and add timer to the header>span tag.
+}
+
 function timerCountdown() {
   interval = setInterval(function () {
     if (timeLimit > 1) {
@@ -55,9 +61,25 @@ function timerCountdown() {
   }, 1000);
 }
 
-// 3. once multiple choice <buttons> clicked,
-var getQuizScreen = document.getElementById("quizScreen");
-getQuizScreen.addEventListener("click", function (event) {
+function renderNextQuestion() {
+  document.getElementById("answer").innerHTML = "";
+
+  if(questionIndex < 0 || questionIndex >= questions.length) {
+    return;
+  }
+
+  var currentQuestion = questions[questionIndex];
+  
+  document.getElementById("question").innerText = currentQuestion.question; // sets the new question in the html
+  for (var i = 1; i < 5; i++) {
+    // populates buttons with letter choices.
+    document.getElementById("btn" + i).innerText =
+      currentQuestion.choices[i - 1];
+  }
+
+}
+
+function multipleChoiceBtn(event) {
   var correctChoice = questions[questionIndex].answer;
   var userChoice = event.target.innerText; // grabs the innertext from button
 
@@ -74,39 +96,19 @@ getQuizScreen.addEventListener("click", function (event) {
       document.getElementById("answer").setAttribute("style", "color: red; font-style: italic;");
 
     }
-
     questionIndex++; // updates the index + 1 
     
     if (questionIndex >= questions.length) { // when 3 >= 3
-      
       clearInterval(interval); // stops the timer.
       
       document.getElementById("quizScreen").style.display = "none"; // hides quiz screen
-      document.getElementById("endScreen").style.display = "block"; // shows endScreen
-           
+      document.getElementById("endScreen").style.display = "block"; // shows endScreen 
     }
-   
     setTimeout(renderNextQuestion, 1200);  
   }
-});
+};
 
-// 4. renderNextQuestion() renders questions the the element.
-function renderNextQuestion() {
-  document.getElementById("answer").innerHTML = "";
-  var currentQuestion = questions[questionIndex];
-  
-  document.getElementById("question").innerText = currentQuestion.question; // sets the new question in the html
-  for (var i = 1; i < 5; i++) {
-    // populates buttons with letter choices.
-    document.getElementById("btn" + i).innerText =
-      currentQuestion.choices[i - 1];
-  }
-
-}
-
-// 5. after entering initial in HighScores, submit.
-document.getElementById("submit").addEventListener("click", function () {
-  
+function submitScore() {
   document.getElementById("endScreen").style.display = "none"; 
   document.getElementById("scoreboardScreen").style.display = "block";
 
@@ -117,13 +119,11 @@ document.getElementById("submit").addEventListener("click", function () {
 
   localStorage.setItem("scores", JSON.stringify(scores));
   // window.location.reload(); // refreshes the page
-  
-  // after hitting submit, display the highscores and hide all the other sections.
+
   getHighScores(scores);
 
-});
+};
 
-// 6. get the high scores from local storage and display them.
 function getHighScores(hiScore) {
   initials = hiScore[hiScore.length -1].initials;
   score = hiScore[hiScore.length -1].score;
@@ -133,25 +133,21 @@ function getHighScores(hiScore) {
   document.getElementById("scoreboardScreen").style.display = "block";
   document.getElementById("highScore").style.display = "block";
 
+  // maybe insert this in a for loop to show all the scores in the array.
   document.getElementById("highScore").innerHTML = `Initials: ${initials}, Score: ${score}.`; // WHY DOESN'T THIS SHOW?bc display:none, somewhere
-    
-  document.getElementById("goBack").addEventListener("click", startQuiz()); // goback btn press:
-  document.getElementById("goBack").addEventListener("click", clearHighScores());// clear high score btn press:
+  
 }
 
-function startQuiz() {
-  // # 1 code might need to be inside here to use "Go Back" btn.
-}
 function clearHighScores() {
-  document.getElementById("highScore").style.display = "none" // maybe should clear console.
+  document.getElementById("highScore").style.display = "none";
 }
 
 
 /*TODO:  
-
+- list item array for high scores.
+  sort array for higher score.
 - display final score and rankings list. could posibly highlight your current score.
-- bug: should wait 3 seconds after click to render next question. Currently, it cycle to next question internally without displaying to page.
-  
-
-
+- missing border unden buttons when selction is chosen.
+- bug: 
+  + should wait 3 seconds after click to render next question. Currently, it cycle internally afte each btn click.
 */
