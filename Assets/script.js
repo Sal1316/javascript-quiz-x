@@ -179,7 +179,9 @@ function clearHighScores() {
   document.getElementById("highScore").style.display = "none";
 }
 
-function showHighScores() {
+function showHighScores(event) {
+  event.preventDefault();
+
   scoreboard = document.getElementById("startScreen").style.display = "none"
   scoreboard = document.getElementById("quizScreen").style.display = "none"
   scoreboard = document.getElementById("endScreen").style.display = "none"
@@ -188,11 +190,8 @@ function showHighScores() {
 
   // create list items and populate them with the local storage info.
   var scores = JSON.parse(localStorage.getItem("scores")) || [];
-  scores.sort(function(a, b) { b.score - a.score }); // sorts array with highest score at the top.
+  scores.sort((a, b) => b.score - a.score ); // sorts array with highest score at the top.
   
-  console.log(scores);
-
-
   for(var i = 0; i < scores.length; i++) {
     var li = document.createElement("li"); // create li
     li.innerText = `Initials: ${scores[i].initials}, Score: ${scores[i].score}`;
@@ -200,18 +199,18 @@ function showHighScores() {
     console.log(li);
   }
 
+  document.getElementById("highScoresLink").removeEventListener("click", showHighScores); // makes the link clickable only "once".
 }
+
+
+
+
+
 
 
 /* TODO: 
 
-bugs: 
-+ when goBack btn is pressed it shows question and startQuiz sections.
-+ last question does not display correct/wrong tag.
-+ should wait 3 seconds after click to render next question. Currently, it cycle internally afte each btn click.
 
-- optional: list the array of previous score, a make high score appear at the top.
-- optional: make view highscore text clickable to display highscores table.
 
 
 
