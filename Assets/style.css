@@ -20,6 +20,9 @@ main {
 #scoreboardScreen {
   display: none;
 }
+#highScoresList{
+  display: none;
+}
 
 header {
   display: flex;

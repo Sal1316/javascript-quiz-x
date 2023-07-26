@@ -9,7 +9,7 @@
   </head>
   <body>
     <header>
-      <a>View Highscores</a>
+      <a id="highScoresLink" href="#scoreboardScreen">View Highscores</a>
       <span id="timer">Time: </span>
     </header>
 
@@ -51,6 +51,13 @@
           </ol>
           <button id="goBack">Go Back</button>
           <button id="clearScores">Clear High Scores</button>
+        </section>
+
+        <section id="highScoresList">
+          <h2>Scoreboard:</h2>
+          <ol id="hichScoreOl">
+            <!-- <li id="highScore"></li>   might need to get rid of thie li bc messing with showhighscore fx. -->
+          </ol>
         </section>
       </div>
     </main>

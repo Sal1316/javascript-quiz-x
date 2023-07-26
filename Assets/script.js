@@ -47,6 +47,7 @@ var timeLimit = 60;
 var score = 0; // inital score.
 
 //Event Handlers:
+document.getElementById("highScoresLink").addEventListener("click", showHighScores);
 document.getElementById("startBtn").addEventListener("click", startQuiz);
 document
   .getElementById("quizScreen")
@@ -177,6 +178,30 @@ function goBack() {
 function clearHighScores() {
   document.getElementById("highScore").style.display = "none";
 }
+
+function showHighScores() {
+  scoreboard = document.getElementById("startScreen").style.display = "none"
+  scoreboard = document.getElementById("quizScreen").style.display = "none"
+  scoreboard = document.getElementById("endScreen").style.display = "none"
+  scoreboard = document.getElementById("scoreboardScreen").style.display = "none"
+  scoreboard = document.getElementById("highScoresList").style.display = "block"
+
+  // create list items and populate them with the local storage info.
+  var scores = JSON.parse(localStorage.getItem("scores")) || [];
+  scores.sort(function(a, b) { b.score - a.score }); // sorts array with highest score at the top.
+  
+  console.log(scores);
+
+
+  for(var i = 0; i < scores.length; i++) {
+    var li = document.createElement("li"); // create li
+    li.innerText = `Initials: ${scores[i].initials}, Score: ${scores[i].score}`;
+    document.getElementById("hichScoreOl").appendChild(li);
+    console.log(li);
+  }
+
+}
+
 
 /* TODO: 
 
