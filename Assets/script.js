@@ -47,7 +47,9 @@ var timeLimit = 60;
 var score = 0; // inital score.
 
 //Event Handlers:
-document.getElementById("highScoresLink").addEventListener("click", showHighScores);
+document
+  .getElementById("highScoresLink")
+  .addEventListener("click", getHighScores);
 document.getElementById("startBtn").addEventListener("click", startQuiz);
 document
   .getElementById("quizScreen")
@@ -97,6 +99,7 @@ function renderNextQuestion() {
 
 function multipleChoiceBtn(event) {
   var correctChoice = questions[questionIndex].answer;
+  console.log(correctChoice)
   var userChoice = event.target.innerText; // grabs the innertext from button
 
   if (event.target.nodeName === "BUTTON") {
@@ -152,22 +155,7 @@ function submitScore() {
   localStorage.setItem("scores", JSON.stringify(scores));
   // window.location.reload(); // refreshes the page
 
-  getHighScores(scores);
-}
-
-function getHighScores(hiScore) {
-  initials = hiScore[hiScore.length - 1].initials;
-  score = hiScore[hiScore.length - 1].score;
-  console.log("Initials: " + initials + ", score: " + score); // gets the last object in the scores array from 5.
-
-  document.getElementById("endScreen").style.display = "none";
-  document.getElementById("scoreboardScreen").style.display = "block";
-  document.getElementById("highScore").style.display = "block";
-
-  // maybe insert this in a for loop to show all the scores in the array.
-  document.getElementById(
-    "highScore"
-  ).innerHTML = `Initials: ${initials}, Score: ${score}.`; // WHY DOESN'T THIS SHOW?bc display:none, somewhere
+  getHighScores();
 }
 
 function goBack() {
@@ -176,41 +164,34 @@ function goBack() {
 }
 
 function clearHighScores() {
-  document.getElementById("highScore").style.display = "none";
+  document.getElementById("hsInitialsList").style.display = "none";
 }
 
-function showHighScores(event) {
-  event.preventDefault();
-
-  scoreboard = document.getElementById("startScreen").style.display = "none"
-  scoreboard = document.getElementById("quizScreen").style.display = "none"
-  scoreboard = document.getElementById("endScreen").style.display = "none"
-  scoreboard = document.getElementById("scoreboardScreen").style.display = "none"
-  scoreboard = document.getElementById("highScoresList").style.display = "block"
-
-  // create list items and populate them with the local storage info.
+function getHighScores() {
   var scores = JSON.parse(localStorage.getItem("scores")) || [];
-  scores.sort((a, b) => b.score - a.score ); // sorts array with highest score at the top.
-  
-  for(var i = 0; i < scores.length; i++) {
-    var li = document.createElement("li"); // create li
-    li.innerText = `Initials: ${scores[i].initials}, Score: ${scores[i].score}`;
-    document.getElementById("hichScoreOl").appendChild(li);
-    console.log(li);
+  scores.sort((a, b) => b.score - a.score); // sorts array with highest score at the top.
+
+  document
+  .getElementById("highScoresLink")
+  .removeEventListener("click", getHighScores); // makes the link clickable only "once".
+
+  for (var i = 0; i < scores.length; i++) {
+      var li = document.createElement("li"); // create li
+      li.innerText = `Initials: ${scores[i].initials}, Score: ${scores[i].score}`;
+      document.getElementById("hsInitialsList").appendChild(li);
+      console.log(li);
   }
 
-  document.getElementById("highScoresLink").removeEventListener("click", showHighScores); // makes the link clickable only "once".
+  scoreboard = document.getElementById("startScreen").style.display = "none";
+  scoreboard = document.getElementById("quizScreen").style.display = "none";
+  scoreboard = document.getElementById("endScreen").style.display = "none";
+  scoreboard = document.getElementById("scoreboardScreen").style.display =
+    "block";
 }
-
-
-
-
-
-
 
 /* TODO: 
 
-
+-consolidate getHighscores fx into show high scores bc they do the same things.
 
 
 
